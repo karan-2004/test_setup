@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,8 +27,8 @@ SECRET_KEY = 'django-insecure-20$0ydccz@)ld330#zb_x20lgq!wyi@9@g=7f5ks=b$3wzda3h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get("DEBUG")) == "1"
 
-ALLOWED_HOSTS = []
-
+allowed_hosts = os.environ.get("ALLOWED_HOSTS")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(",") if host]
 
 # Application definition
 
@@ -80,17 +81,17 @@ DATABASES = {
     }
 }
 
-DB_USERNAME = str(os.environ.get("DB_USERNAME"))
-DB_HOST = str(os.environ.get("DB_HOST"))
-DB_PORT = str(os.environ.get("DB_PORT"))
-DB_PASSWORD = str(os.environ.get("DB_PASSWORD"))
-DB_NAME = str(os.environ.get("DB"))
+POSTGRES_USER = str(os.environ.get("POSTGRES_USER"))
+POSTGRES_HOST = str(os.environ.get("POSTGRES_HOST"))
+POSTGRES_PORT = str(os.environ.get("POSTGRES_PORT"))
+POSTGRES_PASSWORD = str(os.environ.get("POSTGRES_PASSWORD"))
+POSTGRES_DB = str(os.environ.get("POSTGRES_DB"))
 DB_IS_AVAIL = all([
-    DB_NAME,
-    DB_PASSWORD,
-    DB_PORT,
-    DB_HOST,
-    DB_USERNAME
+    POSTGRES_DB,
+    POSTGRES_PASSWORD,
+    POSTGRES_PORT,
+    POSTGRES_HOST,
+    POSTGRES_USER
 ])
 
 POSTGRES_READY = str(os.environ.get("POSTGRES_READY")) == "1"
@@ -98,12 +99,12 @@ POSTGRES_READY = str(os.environ.get("POSTGRES_READY")) == "1"
 if DB_IS_AVAIL and POSTGRES_READY:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgres',
-            'NAME': DB_NAME,
-            'USERNAME': DB_USERNAME,
-            'PASSWORD': DB_PASSWORD,
-            'PORT': DB_PORT,
-            'HOST': DB_HOST
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': POSTGRES_DB,
+            'USERNAME': POSTGRES_USER,
+            'PASSWORD': POSTGRES_PASSWORD,
+            'PORT': POSTGRES_PORT,
+            'HOST': POSTGRES_HOST
         }
 }
 
