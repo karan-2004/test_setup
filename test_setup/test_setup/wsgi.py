@@ -1,0 +1,24 @@
+"""
+WSGI config for test_setup project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
+"""
+
+import os
+import pathlib
+import dotenv 
+
+from django.core.wsgi import get_wsgi_application
+
+CURRENT_DIR = pathlib.Path(__file__).parent
+BASE_DIR = CURRENT_DIR.parent
+ENV_PATH = BASE_DIR / ".env"
+
+dotenv.read_dotenv(str(ENV_PATH))
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_setup.settings')
+
+application = get_wsgi_application()
